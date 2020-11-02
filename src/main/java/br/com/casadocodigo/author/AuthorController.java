@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -23,7 +24,7 @@ public class AuthorController {
     public AuthorResponse create(
             @RequestBody @Valid CreateAuthorRequest request) {
 
-        final Author author = request.toDomain();
+        final Author author = request.toDomain(entityManager);
         entityManager.persist(author);
 
         return AuthorResponse.of(author);
