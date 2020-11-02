@@ -12,8 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorModel {
-    private String timestamp;
-    private int status;
     private List<String> errors;
-    private String path;
 }
