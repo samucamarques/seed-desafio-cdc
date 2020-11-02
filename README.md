@@ -1,5 +1,7 @@
-# Faça um fork desse repositório
+# Primeiro desafio jornada do dev eficiente.
 
-Este é um repositório vazio de propósito. A ideia é que você faça um fork para que eu, Alberto, possa usar o github para ter a chance de olhar vários dos códigos produzido por você e seus(as) colegas da Jornada Dev Eficiente :). 
+## Instruções:
 
-Durante cada uma das seis semanas eu vou pegar código por amostragem e analisar. Feito isso, vou criar um vídeo anonimizando a pessoa que é dona do código, com as minhas observações e postar isso como material de suporte da funcionalidade :). 
+1) Compilar usando o maven wrapper. Executar comando, na raiz do projeto: ./mvnw clean build
+2) Iniciar a aplicação: ./mvnw spring-boot:run
+2) Acessar swagger para testar requisições: http://localhost:8080/swagger-ui/index.html
