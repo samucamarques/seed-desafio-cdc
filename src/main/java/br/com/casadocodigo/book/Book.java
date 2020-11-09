@@ -6,6 +6,7 @@ import br.com.casadocodigo.commons.AnyFutureDate;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
@@ -39,6 +40,7 @@ public class Book {
     @Length(min = 1, max = 500)
     private String briefing;
 
+    @Setter
     private String summary;
 
     @NonNull

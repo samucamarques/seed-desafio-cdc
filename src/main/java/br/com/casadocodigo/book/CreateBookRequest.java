@@ -4,6 +4,7 @@ import br.com.casadocodigo.commons.AnyFutureDate;
 import lombok.AllArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
@@ -16,27 +17,27 @@ import java.util.function.Predicate;
 @AllArgsConstructor
 public class CreateBookRequest {
     @NotEmpty
-    private String title;
+    private final String title;
 
     @NotEmpty
     @Length(min = 1, max = 500)
-    private String briefing;
+    private final String briefing;
 
-    private String summary;
+    private final String summary;
 
     @NotNull
-    @DecimalMin(value = "20.0", inclusive = true)
-    private BigDecimal price;
+    @DecimalMin(value = "20.0")
+    private final BigDecimal price;
 
     @NotNull
     @Min(100)
-    private Integer pages;
+    private final Integer pages;
 
     @NotEmpty
-    private String isbn;
+    private final String isbn;
 
     @AnyFutureDate
-    private Instant releaseAt;
+    private final Instant releaseAt;
 
     public Book toDomain(
             Predicate<String> uniqueTitle, Predicate<String> uniqueIsbn) {
@@ -48,14 +49,21 @@ public class CreateBookRequest {
             throw new DuplicateKeyException("ISBN is in use for another book");
         }
 
-        return new Book(
-                this.title,
-                this.briefing,
-                this.price,
-                pages,
-                isbn,
-                releaseAt,
-                null,
-                null);
+        final Book book =
+                new Book(
+                        title,
+                        briefing,
+                        price,
+                        pages,
+                        isbn,
+                        releaseAt,
+                        null,
+                        null);
+
+        if (StringUtils.hasLength(summary)) {
+            book.setSummary(summary);
+        }
+
+        return book;
     }
 }
