@@ -5,10 +5,10 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.dao.DuplicateKeyException;
 
-import javax.persistence.EntityManager;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
+import java.util.function.Predicate;
 
 @AllArgsConstructor
 @Getter
@@ -22,16 +22,10 @@ public class CreateAuthorRequest {
     @Length(min = 1, max = 400)
     private final String description;
 
-    public Author toDomain(EntityManager entityManager) {
-        entityManager
-                .createQuery("select mailAddress from Author where mailAddress = :mailAddress", String.class)
-                .setParameter("mailAddress", mailAddress)
-                .getResultList()
-                .stream()
-                .findFirst()
-                .ifPresent(mailAddressInDb -> {
-                    throw new DuplicateKeyException("Mail address already exists for another user");
-                });
+    public Author toDomain(Predicate<String> mailAddressPredicate) {
+        if (mailAddressPredicate.test(mailAddress)) {
+            throw new DuplicateKeyException("Mail address already exists for another user");
+        }
 
         return new Author(this.name, this.mailAddress, this.description, Instant.now());
     }

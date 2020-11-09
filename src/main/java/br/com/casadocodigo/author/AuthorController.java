@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -16,7 +14,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AuthorController {
 
-    private final EntityManager entityManager;
+    private final AuthorRepository authorRepository;
 
     @PostMapping("/author/create")
     @ResponseStatus(HttpStatus.OK)
@@ -24,9 +22,9 @@ public class AuthorController {
     public AuthorResponse create(
             @RequestBody @Valid CreateAuthorRequest request) {
 
-        final Author author = request.toDomain(entityManager);
-        entityManager.persist(author);
-
+        final Author author = request.toDomain(authorRepository::existsByMailAddress);
+        authorRepository.save(author);
+        
         return AuthorResponse.of(author);
     }
 }
