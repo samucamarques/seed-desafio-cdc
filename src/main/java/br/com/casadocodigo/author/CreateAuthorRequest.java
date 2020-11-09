@@ -22,9 +22,9 @@ public class CreateAuthorRequest {
     @Length(min = 1, max = 400)
     private final String description;
 
-    public Author toDomain(Predicate<String> mailAddressPredicate) {
-        if (mailAddressPredicate.test(mailAddress)) {
-            throw new DuplicateKeyException("Mail address already exists for another user");
+    public Author toDomain(Predicate<String> uniqueMailPredicate) {
+        if (uniqueMailPredicate.test(mailAddress)) {
+            throw new DuplicateKeyException("Mail address in use for another author");
         }
 
         return new Author(this.name, this.mailAddress, this.description, Instant.now());

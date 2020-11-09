@@ -1,4 +1,4 @@
-package br.com.casadocodigo.author;
+package br.com.casadocodigo.category;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,22 +14,24 @@ import java.util.Map;
 //Intrinsic cognitive load: 4
 @RestController
 @RequiredArgsConstructor
-public class AuthorController {
+public class CategoryController {
 
     //1
-    private final AuthorRepository authorRepository;
+    private final CategoryRepository categoryRepository;
 
-    @PostMapping("/author")
+    @PostMapping("/category")
     @ResponseStatus(HttpStatus.OK)
     @Transactional
     public Map<String, Object> create(
             //1
-            @RequestBody @Valid CreateAuthorRequest request) {
+            @RequestBody @Valid CreateCategoryRequest request) {
 
         //2
-        final Author author = request.toDomain(authorRepository::existsByMailAddress);
-        authorRepository.save(author);
-        
-        return author.toMap();
+        final Category category =
+                categoryRepository.save(
+                        request.toDomain(categoryRepository::existsByName));
+
+
+        return category.toMap();
     }
 }
