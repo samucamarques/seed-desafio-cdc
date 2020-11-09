@@ -23,13 +23,13 @@ public class AuthorController {
     @ResponseStatus(HttpStatus.OK)
     @Transactional
     public Map<String, Object> create(
-            //1
-            @RequestBody @Valid CreateAuthorRequest request) {
+            /* 1 */ @RequestBody @Valid CreateAuthorRequest request) {
 
         //2
-        final Author author = request.toDomain(authorRepository::existsByMailAddress);
-        authorRepository.save(author);
-        
+        final Author author =
+                authorRepository.save(
+                        request.toDomain(authorRepository::existsByMailAddress));
+
         return author.toMap();
     }
 }

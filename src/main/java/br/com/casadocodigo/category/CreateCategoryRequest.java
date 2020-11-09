@@ -1,14 +1,12 @@
 package br.com.casadocodigo.category;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.dao.DuplicateKeyException;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.function.Predicate;
 
 @AllArgsConstructor
-@Getter
 public class CreateCategoryRequest {
     @NotEmpty
     private final String name;

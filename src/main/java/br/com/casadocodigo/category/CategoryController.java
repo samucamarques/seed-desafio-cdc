@@ -23,8 +23,7 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.OK)
     @Transactional
     public Map<String, Object> create(
-            //1
-            @RequestBody @Valid CreateCategoryRequest request) {
+            /* 1 */ @RequestBody @Valid CreateCategoryRequest request) {
 
         //2
         final Category category =

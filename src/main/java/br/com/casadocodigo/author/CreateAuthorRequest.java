@@ -1,7 +1,6 @@
 package br.com.casadocodigo.author;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.dao.DuplicateKeyException;
 
@@ -11,7 +10,6 @@ import java.time.Instant;
 import java.util.function.Predicate;
 
 @AllArgsConstructor
-@Getter
 public class CreateAuthorRequest {
     @NotEmpty
     private final String name;
