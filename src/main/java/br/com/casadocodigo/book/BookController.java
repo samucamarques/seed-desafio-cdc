@@ -1,5 +1,7 @@
 package br.com.casadocodigo.book;
 
+import br.com.casadocodigo.author.AuthorRepository;
+import br.com.casadocodigo.category.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Map;
+import java.util.stream.Stream;
 
 //Intrinsic cognitive load: 4
 @RestController
@@ -18,6 +21,8 @@ public class BookController {
 
     //1
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
+    private final AuthorRepository authorRepository;
 
     @PostMapping("/book")
     @ResponseStatus(HttpStatus.OK)
@@ -29,8 +34,11 @@ public class BookController {
         final Book book =
                 bookRepository.save(
                         request.toDomain(
-                                bookRepository::existsByTitle, bookRepository::existsByIsbn));
+                                bookRepository::existsByTitle,
+                                bookRepository::existsByIsbn,
+                                categoryRepository::findById,
+                                authorRepository::findById));
 
-        return null;
+        return book.toMap();
     }
 }

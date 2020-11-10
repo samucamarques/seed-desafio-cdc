@@ -15,6 +15,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = AnyFutureDateValidator.class)
 public @interface AnyFutureDate {
 
+    String fieldName() default "";
+
+    String message() default "Only future dates allowed on {fieldName}";
+
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};

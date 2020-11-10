@@ -21,6 +21,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Map;
 
 @Entity
 @RequiredArgsConstructor
@@ -72,4 +73,7 @@ public class Book {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Author author;
 
+    public Map<String, Object> toMap() {
+        return Map.of("id", id, "title", title);
+    }
 }

@@ -30,7 +30,6 @@ public class CategoryController {
                 categoryRepository.save(
                         request.toDomain(categoryRepository::existsByName));
 
-
         return category.toMap();
     }
 }

@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.Map;
 
@@ -38,9 +37,7 @@ public class Author {
     @Length(max = 400)
     private String description;
 
-    @NonNull
-    @NotNull
-    private Instant createdAt;
+    private Instant createdAt = Instant.now();
 
     public Map<String, Object> toMap() {
         return Map.of("id", id, "name", name, "createdAt", createdAt);
