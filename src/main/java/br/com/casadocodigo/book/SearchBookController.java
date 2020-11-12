@@ -34,10 +34,10 @@ public class SearchBookController {
 
     @GetMapping("/{id}/detail")
     @ResponseStatus(HttpStatus.OK)
-    //1
-    public BookDetailProjection detail(@PathVariable("id") Long id) {
+    public Map<String, Object> detail(@PathVariable("id") Long id) {
         return bookRepository
                 .findDetailById(id)
+                .map(BookDetailProjection::toMap) /* 1 */
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)); /* 1 */
     }
 }

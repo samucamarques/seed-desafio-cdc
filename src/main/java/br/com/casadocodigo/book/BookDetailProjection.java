@@ -4,6 +4,7 @@ import br.com.casadocodigo.author.AuthorDetailProjection;
 import br.com.casadocodigo.category.CategoryDetailProjection;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 public interface BookDetailProjection {
 
@@ -22,4 +23,16 @@ public interface BookDetailProjection {
     CategoryDetailProjection getCategory();
 
     AuthorDetailProjection getAuthor();
+
+    default Map<String, Object> toMap() {
+        return Map.of(
+                "title", getTitle(),
+                "briefing", getBriefing(),
+                "summary", getSummary(),
+                "price", getPrice(),
+                "pages", getPages(),
+                "isbn", getIsbn(),
+                "author", getAuthor().toMap(),
+                "category", getCategory().toMap());
+    }
 }
