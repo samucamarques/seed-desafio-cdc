@@ -12,14 +12,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = AnyFutureDateValidator.class)
-public @interface AnyFutureDate {
+@Constraint(validatedBy = UniquePredicateValidator.class)
+public @interface UniquePredicate {
 
-    String message() default "Only future dates allowed on {fieldName}";
+    String message() default "{property} is in use";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    String fieldName() default "";
+    String property();
 }

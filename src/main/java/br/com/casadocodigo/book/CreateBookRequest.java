@@ -3,6 +3,7 @@ package br.com.casadocodigo.book;
 import br.com.casadocodigo.author.Author;
 import br.com.casadocodigo.category.Category;
 import br.com.casadocodigo.commons.AnyFutureDate;
+import br.com.casadocodigo.commons.UniquePredicate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -19,13 +20,13 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.function.LongFunction;
-import java.util.function.Predicate;
 
-//Intrinsic cognitive load: 7
+//Intrinsic cognitive load: 4
 @AllArgsConstructor
 @Getter // for swagger to show the properties on request body example
 public class CreateBookRequest {
     @NotEmpty
+    @UniquePredicate(property = "title")
     private final String title;
 
     @NotEmpty
@@ -43,6 +44,7 @@ public class CreateBookRequest {
     private final Integer pages;
 
     @NotEmpty
+    @UniquePredicate(property = "isbn")
     private final String isbn;
 
     @AnyFutureDate(fieldName = "releaseAt")
@@ -59,20 +61,10 @@ public class CreateBookRequest {
     @SneakyThrows
     //1
     public Book toDomain(
-            Predicate<String> uniqueTitle,
-            Predicate<String> uniqueIsbn,
             LongFunction<Optional<Category>> findCategoryById,
             LongFunction<Optional<Author>> findAuthorById) {
 
         final BindingResult errors = new BeanPropertyBindingResult(this, this.getClass().getSimpleName());
-        if (uniqueTitle.test(title)) {
-            //1
-            errors.rejectValue("title", null, "is in use for another book");
-        }
-        if (uniqueIsbn.test(isbn)) {
-            //1
-            errors.rejectValue("isbn", null, "is in use for another book");
-        }
         final Optional<Category> possibleCategory = findCategoryById.apply(categoryId);
         if (possibleCategory.isEmpty()) {
             //1

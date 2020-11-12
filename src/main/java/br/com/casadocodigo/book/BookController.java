@@ -40,8 +40,6 @@ public class BookController {
         final Book book =
                 bookRepository.save(
                         request.toDomain(
-                                /* 1 */ bookRepository::existsByTitle,
-                                /* 1 */ bookRepository::existsByIsbn,
                                 /* 1 */ categoryRepository::findById,
                                 /* 1 */ authorRepository::findById));
 
@@ -52,7 +50,8 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public List<Map<String, Object>> list() {
         // quebrou a coesao do meu controller =(
-        return bookRepository.findAll()
+        return bookRepository
+                .findAll()
                 .stream()
                 .map(Book::toMap)
                 .collect(Collectors.toList());

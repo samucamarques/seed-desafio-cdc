@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Map;
 
-//Intrinsic cognitive load: 4
+//Intrinsic cognitive load: 3
 @RestController
 @RequiredArgsConstructor
 public class AuthorController {
@@ -27,8 +27,7 @@ public class AuthorController {
 
         //1
         final Author author =
-                authorRepository.save(
-                        /* 1 */ request.toDomain(authorRepository::existsByMailAddress));
+                authorRepository.save(request.toDomain());
 
         return author.toMap();
     }

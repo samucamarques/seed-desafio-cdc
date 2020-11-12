@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Map;
 
-//Intrinsic cognitive load: 4
+//Intrinsic cognitive load: 3
 @RestController
 @RequiredArgsConstructor
 public class CategoryController {
@@ -27,8 +27,7 @@ public class CategoryController {
 
         //1
         final Category category =
-                categoryRepository.save(
-                        /* 1 */ request.toDomain(categoryRepository::existsByName));
+                categoryRepository.save(request.toDomain());
 
         return category.toMap();
     }
