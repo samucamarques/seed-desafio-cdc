@@ -27,7 +27,7 @@ public class UniquePredicateValidator implements ConstraintValidator<UniquePredi
                         "existsByTitle", bookRepository::existsByTitle,
                         "existsByIsbn", bookRepository::existsByIsbn,
                         "existsByMailAddress", authorRepository::existsByMailAddress,
-                        "uniqueNamePredicate", categoryRepository::existsByName);
+                        "existsByName", categoryRepository::existsByName);
 
         predicate = String.format("existsBy%s", StringUtils.capitalize(constraintAnnotation.property()));
     }

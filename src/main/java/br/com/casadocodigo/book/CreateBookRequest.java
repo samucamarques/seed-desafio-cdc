@@ -8,9 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
@@ -21,7 +20,7 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.function.LongFunction;
 
-//Intrinsic cognitive load: 4
+//Intrinsic cognitive load: 5
 @AllArgsConstructor
 @Getter // for swagger to show the properties on request body example
 public class CreateBookRequest {
@@ -64,21 +63,15 @@ public class CreateBookRequest {
             LongFunction<Optional<Category>> findCategoryById,
             LongFunction<Optional<Author>> findAuthorById) {
 
-        final BindingResult errors = new BeanPropertyBindingResult(this, this.getClass().getSimpleName());
-        final Optional<Category> possibleCategory = findCategoryById.apply(categoryId);
-        if (possibleCategory.isEmpty()) {
-            //1
-            errors.rejectValue("categoryId", null, "not found");
-        }
-        final Optional<Author> possibleAuthor = findAuthorById.apply(authorId);
-        if (possibleAuthor.isEmpty()) {
-            //1
-            errors.rejectValue("authorId", null, "not found");
-        }
-        if (errors.hasErrors()) {
-            //1
-            throw new MethodArgumentNotValidException(null, errors);
-        }
+        //1
+        final Category category =
+                findCategoryById.apply(categoryId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)); //1
+
+        //1
+        final Author author =
+                findAuthorById.apply(authorId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)); //1
 
         return Book.builder()
                 .title(title)
@@ -87,8 +80,8 @@ public class CreateBookRequest {
                 .pages(pages)
                 .isbn(isbn)
                 .releaseAt(releaseAt)
-                .category(possibleCategory.get())
-                .author(possibleAuthor.get())
+                .category(category)
+                .author(author)
                 .summary(summary)
                 .build();
     }
