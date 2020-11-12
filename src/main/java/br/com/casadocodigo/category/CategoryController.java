@@ -25,10 +25,10 @@ public class CategoryController {
     public Map<String, Object> create(
             /* 1 */ @RequestBody @Valid CreateCategoryRequest request) {
 
-        //2
+        //1
         final Category category =
                 categoryRepository.save(
-                        request.toDomain(categoryRepository::existsByName));
+                        /* 1 */ request.toDomain(categoryRepository::existsByName));
 
         return category.toMap();
     }

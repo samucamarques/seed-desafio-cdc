@@ -12,16 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Map;
-import java.util.stream.Stream;
 
-//Intrinsic cognitive load: 4
+//Intrinsic cognitive load: 9
 @RestController
 @RequiredArgsConstructor
 public class BookController {
 
     //1
     private final BookRepository bookRepository;
+    //1
     private final CategoryRepository categoryRepository;
+    //1
     private final AuthorRepository authorRepository;
 
     @PostMapping("/book")
@@ -30,14 +31,14 @@ public class BookController {
     public Map<String, Object> create(
             /* 1 */ @RequestBody @Valid CreateBookRequest request) {
 
-        //2
+        //1
         final Book book =
                 bookRepository.save(
                         request.toDomain(
-                                bookRepository::existsByTitle,
-                                bookRepository::existsByIsbn,
-                                categoryRepository::findById,
-                                authorRepository::findById));
+                                /* 1 */ bookRepository::existsByTitle,
+                                /* 1 */ bookRepository::existsByIsbn,
+                                /* 1 */ categoryRepository::findById,
+                                /* 1 */ authorRepository::findById));
 
         return book.toMap();
     }

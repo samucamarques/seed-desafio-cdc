@@ -25,10 +25,10 @@ public class AuthorController {
     public Map<String, Object> create(
             /* 1 */ @RequestBody @Valid CreateAuthorRequest request) {
 
-        //2
+        //1
         final Author author =
                 authorRepository.save(
-                        request.toDomain(authorRepository::existsByMailAddress));
+                        /* 1 */ request.toDomain(authorRepository::existsByMailAddress));
 
         return author.toMap();
     }

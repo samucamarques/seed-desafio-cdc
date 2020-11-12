@@ -27,16 +27,4 @@ public class ErrorHandler {
                                                 .collect(Collectors.toList()))
                                 .build());
     }
-
-    @ExceptionHandler(value = {DuplicateKeyException.class})
-    protected ResponseEntity<ErrorModel> handle(DuplicateKeyException exception) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(
-                        ErrorModel.builder()
-                                .errors(List.of(
-                                        exception.getMessage() == null || exception.getMessage().isEmpty()
-                                                ? "resource duplicated"
-                                                : exception.getMessage()))
-                                .build());
-    }
 }
