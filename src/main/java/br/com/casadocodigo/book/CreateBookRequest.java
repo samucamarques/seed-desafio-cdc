@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.LongFunction;
 import java.util.function.Predicate;
 
 //Intrinsic cognitive load: 7
@@ -62,8 +61,8 @@ public class CreateBookRequest {
     public Book toDomain(
             Predicate<String> uniqueTitle,
             Predicate<String> uniqueIsbn,
-            Function<Long, Optional<Category>> findCategoryById,
-            Function<Long, Optional<Author>> findAuthorById) {
+            LongFunction<Optional<Category>> findCategoryById,
+            LongFunction<Optional<Author>> findAuthorById) {
 
         final BindingResult errors = new BeanPropertyBindingResult(this, this.getClass().getSimpleName());
         if (uniqueTitle.test(title)) {
@@ -89,23 +88,17 @@ public class CreateBookRequest {
             throw new MethodArgumentNotValidException(null, errors);
         }
 
-        final Book book =
-                new Book(
-                        title,
-                        briefing,
-                        price,
-                        pages,
-                        isbn,
-                        releaseAt,
-                        possibleCategory.get(),
-                        possibleAuthor.get());
-
-        if (StringUtils.hasLength(summary)) {
-            //1
-            book.setSummary(summary);
-        }
-
-        return book;
+        return Book.builder()
+                .title(title)
+                .briefing(briefing)
+                .price(price)
+                .pages(pages)
+                .isbn(isbn)
+                .releaseAt(releaseAt)
+                .category(possibleCategory.get())
+                .author(possibleAuthor.get())
+                .summary(summary)
+                .build();
     }
 
 }
