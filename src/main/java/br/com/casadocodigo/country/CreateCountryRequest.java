@@ -1,27 +1,26 @@
-package br.com.casadocodigo.category;
+package br.com.casadocodigo.country;
 
 import br.com.casadocodigo.commons.UniquePredicate;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
-import lombok.SneakyThrows;
 
 import javax.validation.constraints.NotEmpty;
 
 //Intrinsic cognitive load: 1
 @Getter // for swagger to show the properties on request body example
-public class CreateCategoryRequest {
+public class CreateCountryRequest {
+
     @NotEmpty
-    @UniquePredicate(category = "category", property = "name")
-    private final String name;
+    @UniquePredicate(category = "country", property = "name")
+    private String name;
 
     @JsonCreator
-    public CreateCategoryRequest(String name) {
+    public CreateCountryRequest(String name) {
         this.name = name;
     }
 
-    @SneakyThrows
     //1
-    public Category toDomain() {
-        return new Category(this.name);
+    public Country toDomain() {
+        return new Country(name);
     }
 }

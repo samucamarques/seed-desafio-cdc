@@ -25,7 +25,7 @@ import java.util.function.LongFunction;
 @Getter // for swagger to show the properties on request body example
 public class CreateBookRequest {
     @NotEmpty
-    @UniquePredicate(property = "title")
+    @UniquePredicate(category = "book", property = "title")
     private final String title;
 
     @NotEmpty
@@ -43,7 +43,7 @@ public class CreateBookRequest {
     private final Integer pages;
 
     @NotEmpty
-    @UniquePredicate(property = "isbn")
+    @UniquePredicate(category = "book", property = "isbn")
     private final String isbn;
 
     @AnyFutureDate(fieldName = "releaseAt")

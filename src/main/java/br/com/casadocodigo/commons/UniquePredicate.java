@@ -22,4 +22,6 @@ public @interface UniquePredicate {
     Class<? extends Payload>[] payload() default {};
 
     String property();
+
+    String category();
 }

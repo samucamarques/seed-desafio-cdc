@@ -17,7 +17,7 @@ public class CreateAuthorRequest {
     private final String name;
     @NotEmpty
     @Email
-    @UniquePredicate(property = "mailAddress")
+    @UniquePredicate(category = "author", property = "mailAddress")
     private final String mailAddress;
     @NotEmpty
     @Length(min = 1, max = 400)
