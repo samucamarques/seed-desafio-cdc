@@ -12,16 +12,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = UniquePredicateValidator.class)
-public @interface UniquePredicate {
+@Constraint(validatedBy = DocIdValidator.class)
+public @interface DocId {
 
-    String message() default "duplications not allowed";
+    String message() default "must be a valid document id";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
-    String property();
-
-    String category();
 }

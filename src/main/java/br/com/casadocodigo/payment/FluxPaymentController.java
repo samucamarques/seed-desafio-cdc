@@ -1,4 +1,4 @@
-package br.com.casadocodigo.author;
+package br.com.casadocodigo.payment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,26 +9,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Map;
 
-//Intrinsic cognitive load: 3
 @RestController
+@RequestMapping("/flux/payment")
 @RequiredArgsConstructor
-@RequestMapping("/author")
-public class AuthorController {
+public class FluxPaymentController {
 
-    //1
-    private final AuthorRepository authorRepository;
+    private final FluxPaymentRepository fluxPaymentRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> create(
-            /* 1 */ @RequestBody @Valid CreateAuthorRequest request) {
-
-        //1
-        final Author author =
-                authorRepository.save(request.toDomain());
-
-        return author.toMap();
+    public Long create(@RequestBody @Valid FluxPaymentRequest request) {
+        FluxPayment fluxCreated = fluxPaymentRepository.save(request.toDomain());
+        return fluxCreated.getId();
     }
 }

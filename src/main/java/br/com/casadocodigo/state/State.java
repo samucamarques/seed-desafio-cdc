@@ -41,4 +41,11 @@ public class State {
     public Map<String, Object> toMap() {
         return Map.of("id", id, "name", name);
     }
+
+    public boolean hasId(Long stateId) {
+        Assert.notNull(id, "the entity id can't be null here");
+        Assert.notNull(stateId, "stateId can't be null here");
+
+        return id.equals(stateId);
+    }
 }

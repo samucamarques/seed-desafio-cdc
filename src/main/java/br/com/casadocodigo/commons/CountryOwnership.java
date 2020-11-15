@@ -6,22 +6,22 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({FIELD})
+@Target({TYPE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = UniquePredicateValidator.class)
-public @interface UniquePredicate {
+@Constraint(validatedBy = CountryOwnershipValidator.class)
+public @interface CountryOwnership {
 
-    String message() default "duplications not allowed";
+    String message() default "{stateField} must be member of the {countryField}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    String property();
+    String countryField();
 
-    String category();
+    String stateField();
 }
