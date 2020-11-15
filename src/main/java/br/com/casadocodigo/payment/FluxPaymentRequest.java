@@ -4,6 +4,8 @@ import br.com.casadocodigo.commons.CountryOwnership;
 import br.com.casadocodigo.commons.DocId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -26,7 +28,7 @@ public class FluxPaymentRequest {
     private final String lastName;
 
     @NotEmpty
-    @DocId
+    @DocId(cpf = @CPF, cnpj = @CNPJ)
     private final String docId;
 
     @NotEmpty
