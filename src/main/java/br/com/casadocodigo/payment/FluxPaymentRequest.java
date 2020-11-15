@@ -9,7 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-//Intrinsic cognitive load: 5
+//Intrinsic cognitive load: 1
 @AllArgsConstructor
 @Getter // for swagger to show the properties on request body example
 @CountryOwnership(countryField = "countryId", stateField = "stateId")
@@ -49,6 +49,7 @@ public class FluxPaymentRequest {
     @NotEmpty
     private final String zipCode;
 
+    //1
     public FluxPayment toDomain() {
         return FluxPayment.builder()
                 .mailAccount(mailAccount)

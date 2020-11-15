@@ -10,16 +10,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+//Intrinsic cognitive load: 3
 @RestController
 @RequestMapping("/flux/payment")
 @RequiredArgsConstructor
 public class FluxPaymentController {
 
+    //1
     private final FluxPaymentRepository fluxPaymentRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public Long create(@RequestBody @Valid FluxPaymentRequest request) {
+    public Long create(
+            /* 1 */ @RequestBody @Valid FluxPaymentRequest request) {
+
+        //1
         FluxPayment fluxCreated = fluxPaymentRepository.save(request.toDomain());
         return fluxCreated.getId();
     }
