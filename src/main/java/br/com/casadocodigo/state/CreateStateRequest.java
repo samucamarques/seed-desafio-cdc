@@ -1,6 +1,5 @@
 package br.com.casadocodigo.state;
 
-import br.com.casadocodigo.author.Author;
 import br.com.casadocodigo.commons.validation.ExistsById;
 import br.com.casadocodigo.commons.validation.UniquePredicate;
 import br.com.casadocodigo.country.Country;
@@ -11,7 +10,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 import java.util.function.LongFunction;
 
 //Intrinsic cognitive load: 1
@@ -24,17 +22,18 @@ public class CreateStateRequest {
     private final String name;
 
     @NotNull
-    //@ExistsById(entityClass = Country.class)
+    @ExistsById(entityClass = Country.class)
     private final Long countryId;
 
     //1
     public State toDomain(
-            LongFunction<Optional<Country>> findCountryById) {
+            LongFunction<Country> getReference) {
 
         //1
-        final Country country =
-                findCountryById.apply(countryId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)); //1
+        final Country country = getReference.apply(countryId); //1
+        if (country == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
 
         return new State(name, country);
     }

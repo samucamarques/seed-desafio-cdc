@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.net.URI;
 
-//Intrinsic cognitive load: 3
+//Intrinsic cognitive load: 5
 @RestController
 @RequestMapping("/flux/payment")
 @RequiredArgsConstructor
@@ -20,6 +20,7 @@ public class AcquisitionController {
 
     //1
     private final AcquisitionRepository acquisitionRepository;
+    //1
     private final BookRepository bookRepository;
 
     @PostMapping
@@ -28,7 +29,7 @@ public class AcquisitionController {
             /* 1 */ @RequestBody @Valid AcquisitionRequest request) {
 
         //1
-        Acquisition acquisition = acquisitionRepository.save(request.toDomain(bookRepository::findAllById));
+        Acquisition acquisition = acquisitionRepository.save(request.toDomain(bookRepository::findAllById)); //1
         return URI.create(String.format("/detail/%sd", acquisition.getId()));
     }
 }

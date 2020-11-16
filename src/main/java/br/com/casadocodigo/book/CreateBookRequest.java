@@ -17,10 +17,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Optional;
 import java.util.function.LongFunction;
 
-//Intrinsic cognitive load: 5
+//Intrinsic cognitive load: 7
 @AllArgsConstructor
 @Getter // for swagger to show the properties on request body example
 public class CreateBookRequest {
@@ -51,27 +50,31 @@ public class CreateBookRequest {
     private final Instant releaseAt;
 
     @NotNull
-    //@ExistsById(entityClass = Category.class)
+    @ExistsById(entityClass = Category.class)
     private final Long categoryId;
 
     @NotNull
-    //@ExistsById(entityClass = Author.class)
+    @ExistsById(entityClass = Author.class)
     private final Long authorId;
 
     //1
     public Book toDomain(
-            LongFunction<Optional<Category>> findCategoryById,
-            LongFunction<Optional<Author>> findAuthorById) {
+            LongFunction<Category> getCategoryReference,
+            LongFunction<Author> getAuthorReference) {
 
         //1
-        final Category category =
-                findCategoryById.apply(categoryId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)); //1
+        final Category category = getCategoryReference.apply(categoryId);//1
+        if (category == null) {
+            //1
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
 
         //1
-        final Author author =
-                findAuthorById.apply(authorId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)); //1
+        final Author author = getAuthorReference.apply(authorId); //1
+        if (author == null) {
+            //1
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
 
         return Book.builder()
                 .title(title)
@@ -85,5 +88,4 @@ public class CreateBookRequest {
                 .summary(summary)
                 .build();
     }
-
 }

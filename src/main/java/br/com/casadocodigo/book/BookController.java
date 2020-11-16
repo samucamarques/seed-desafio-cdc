@@ -35,8 +35,8 @@ public class BookController {
         final Book book =
                 bookRepository.save(
                         request.toDomain(
-                                /* 1 */ categoryRepository::findById,
-                                /* 1 */ authorRepository::findById));
+                                /* 1 */ categoryRepository::getOne,
+                                /* 1 */ authorRepository::getOne));
 
         return book.toMap();
     }

@@ -23,6 +23,6 @@ public class StateController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Object> create(@Valid @RequestBody CreateStateRequest request) {
-        return stateRepository.save(request.toDomain(countryRepository::findById)).toMap();
+        return stateRepository.save(request.toDomain(countryRepository::getOne)).toMap();
     }
 }

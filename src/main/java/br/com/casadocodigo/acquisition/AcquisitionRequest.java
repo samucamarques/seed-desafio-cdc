@@ -3,6 +3,9 @@ package br.com.casadocodigo.acquisition;
 import br.com.casadocodigo.book.Book;
 import br.com.casadocodigo.commons.validation.CountryOwnership;
 import br.com.casadocodigo.commons.validation.DocId;
+import br.com.casadocodigo.commons.validation.ExistsById;
+import br.com.casadocodigo.country.Country;
+import br.com.casadocodigo.state.State;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -18,7 +21,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-//Intrinsic cognitive load: 1
+//Intrinsic cognitive load: 7
 @AllArgsConstructor
 @Getter // for swagger to show the properties on request body example
 @CountryOwnership(countryField = "countryId", stateField = "stateId")
@@ -48,10 +51,10 @@ public class AcquisitionRequest {
     private final String city;
 
     @NotNull
-    //@ExistsById(entityClass = Country.class)
+    @ExistsById(entityClass = Country.class)
     private final Long countryId;
 
-    //@ExistsById(entityClass = State.class)
+    @ExistsById(entityClass = State.class)
     private final Long stateId;
 
     @NotEmpty
@@ -70,6 +73,7 @@ public class AcquisitionRequest {
 
     //1
     public Acquisition toDomain(Function<List<Long>, List<Book>> findBookByIdIn) {
+        //1
         final List<Book> booksOnShoppingCart = findBookByIdIn.apply(getBookIds());
 
         return Acquisition.builder()
@@ -86,16 +90,20 @@ public class AcquisitionRequest {
                 .zipCode(zipCode)
                 .totalPrice(totalPrice)
                 .items(items.stream()
+                        //1
                         .map(item -> new Item(item.getAmmount(), findMyBook(booksOnShoppingCart, item.getBookId())))
+                        //1
                         .collect(Collectors.toList()))
                 .build();
     }
 
     private Book findMyBook(List<Book> books, Long bookId) {
+        //1
         return books.stream().filter(book -> book.hasId(bookId)).findFirst().orElse(null);
     }
 
     private List<Long> getBookIds() {
-        return items.stream().map(ItemRequest::getBookId).collect(Collectors.toList());
+        //1
+        return items.stream().map(ItemRequest::getBookId).collect(Collectors.toList()); //1
     }
 }
