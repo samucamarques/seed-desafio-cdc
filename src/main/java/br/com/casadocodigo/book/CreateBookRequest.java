@@ -2,11 +2,11 @@ package br.com.casadocodigo.book;
 
 import br.com.casadocodigo.author.Author;
 import br.com.casadocodigo.category.Category;
-import br.com.casadocodigo.commons.AnyFutureDate;
-import br.com.casadocodigo.commons.UniquePredicate;
+import br.com.casadocodigo.commons.validation.AnyFutureDate;
+import br.com.casadocodigo.commons.validation.ExistsById;
+import br.com.casadocodigo.commons.validation.UniquePredicate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,6 +24,7 @@ import java.util.function.LongFunction;
 @AllArgsConstructor
 @Getter // for swagger to show the properties on request body example
 public class CreateBookRequest {
+
     @NotEmpty
     @UniquePredicate(category = "book", property = "title")
     private final String title;
@@ -50,14 +51,13 @@ public class CreateBookRequest {
     private final Instant releaseAt;
 
     @NotNull
-    @Min(1)
+    //@ExistsById(entityClass = Category.class)
     private final Long categoryId;
 
     @NotNull
-    @Min(1)
+    //@ExistsById(entityClass = Author.class)
     private final Long authorId;
 
-    @SneakyThrows
     //1
     public Book toDomain(
             LongFunction<Optional<Category>> findCategoryById,

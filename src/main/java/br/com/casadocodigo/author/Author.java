@@ -1,5 +1,6 @@
 package br.com.casadocodigo.author;
 
+import br.com.casadocodigo.commons.contracts.CDCEntity;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.Map;
 @Entity
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class Author {
+public class Author implements CDCEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

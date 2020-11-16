@@ -1,6 +1,6 @@
 package br.com.casadocodigo.country;
 
-import br.com.casadocodigo.commons.UniquePredicate;
+import br.com.casadocodigo.commons.validation.UniquePredicate;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 

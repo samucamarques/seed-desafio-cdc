@@ -1,4 +1,4 @@
-package br.com.casadocodigo.commons;
+package br.com.casadocodigo.commons.validation;
 
 import br.com.casadocodigo.author.AuthorRepository;
 import br.com.casadocodigo.book.BookRepository;

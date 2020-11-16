@@ -2,7 +2,8 @@ package br.com.casadocodigo.book;
 
 import br.com.casadocodigo.author.Author;
 import br.com.casadocodigo.category.Category;
-import br.com.casadocodigo.commons.AnyFutureDate;
+import br.com.casadocodigo.commons.contracts.CDCEntity;
+import br.com.casadocodigo.commons.validation.AnyFutureDate;
 import lombok.Builder;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -24,7 +25,7 @@ import java.util.Map;
 
 @Entity
 @Builder
-public class Book {
+public class Book implements CDCEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -101,6 +102,17 @@ public class Book {
 
     public Map<String, Object> toMap() {
         return Map.of("id", id, "title", title);
+    }
+
+    public boolean hasId(Long bookId) {
+        Assert.notNull(id, "the entity id can't be null here");
+        Assert.notNull(bookId, "bookId can't be null here");
+
+        return id.equals(bookId);
+    }
+
+    public BigDecimal priceOf(int amount) {
+        return price.multiply(BigDecimal.valueOf(amount));
     }
 
     public static class BookBuilder {

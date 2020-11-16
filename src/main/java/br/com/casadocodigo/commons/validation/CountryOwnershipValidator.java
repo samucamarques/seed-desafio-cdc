@@ -1,4 +1,4 @@
-package br.com.casadocodigo.commons;
+package br.com.casadocodigo.commons.validation;
 
 import br.com.casadocodigo.country.CountryRepository;
 import br.com.casadocodigo.state.StateRepository;

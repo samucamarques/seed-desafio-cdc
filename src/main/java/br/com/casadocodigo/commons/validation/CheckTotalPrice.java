@@ -1,4 +1,6 @@
-package br.com.casadocodigo.commons;
+package br.com.casadocodigo.commons.validation;
+
+import br.com.casadocodigo.commons.contracts.CDCEntity;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -6,22 +8,19 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({TYPE})
+@Target({FIELD})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = CountryOwnershipValidator.class)
-public @interface CountryOwnership {
+@Constraint(validatedBy = CheckTotalPriceValidator.class)
+public @interface CheckTotalPrice {
 
-    String message() default "{stateField} must be member of the {countryField}";
+    String message() default "total price is invalid";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    String countryField();
-
-    String stateField();
 }

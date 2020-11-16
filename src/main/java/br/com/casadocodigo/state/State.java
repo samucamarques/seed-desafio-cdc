@@ -1,5 +1,6 @@
 package br.com.casadocodigo.state;
 
+import br.com.casadocodigo.commons.contracts.CDCEntity;
 import br.com.casadocodigo.country.Country;
 import org.springframework.util.Assert;
 
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @Entity
-public class State {
+public class State implements CDCEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

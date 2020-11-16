@@ -1,7 +1,4 @@
-package br.com.casadocodigo.commons;
-
-import org.hibernate.validator.constraints.br.CNPJ;
-import org.hibernate.validator.constraints.br.CPF;
+package br.com.casadocodigo.commons.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -15,16 +12,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = DocIdValidator.class)
-public @interface DocId {
+@Constraint(validatedBy = UniquePredicateValidator.class)
+public @interface UniquePredicate {
 
-    String message() default "must be a valid document id";
+    String message() default "duplications not allowed";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    CPF cpf();
+    String property();
 
-    CNPJ cnpj();
+    String category();
 }

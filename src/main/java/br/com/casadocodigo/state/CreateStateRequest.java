@@ -1,6 +1,8 @@
 package br.com.casadocodigo.state;
 
-import br.com.casadocodigo.commons.UniquePredicate;
+import br.com.casadocodigo.author.Author;
+import br.com.casadocodigo.commons.validation.ExistsById;
+import br.com.casadocodigo.commons.validation.UniquePredicate;
 import br.com.casadocodigo.country.Country;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +24,7 @@ public class CreateStateRequest {
     private final String name;
 
     @NotNull
+    //@ExistsById(entityClass = Country.class)
     private final Long countryId;
 
     //1

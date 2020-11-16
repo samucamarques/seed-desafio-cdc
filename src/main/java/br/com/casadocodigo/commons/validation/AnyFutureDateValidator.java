@@ -1,4 +1,4 @@
-package br.com.casadocodigo.commons;
+package br.com.casadocodigo.commons.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
