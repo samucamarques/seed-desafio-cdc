@@ -20,7 +20,13 @@ public class SpringContext implements ApplicationContextAware {
 
     public <T> JpaRepository<T, Long> getRepositoryBean(Class<T> entityClass) {
         return (JpaRepository<T, Long>) applicationContext.getBean(
-                String.format("%sRepository", entityClass.getSimpleName()));
+                String.format("%sRepository", decapitalize(entityClass.getSimpleName())), JpaRepository.class);
+    }
+
+    private String decapitalize(String name) {
+        char[] chars = name.toCharArray();
+        chars[0] = Character.toLowerCase(chars[0]);
+        return new String(chars);
     }
 
 }

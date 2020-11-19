@@ -84,7 +84,7 @@ public class Book implements CDCEntity {
         Assert.notNull(price, "there is no book without price");
         Assert.state(price.compareTo(BigDecimal.valueOf(20)) >= 0, "min price of a book is 20.0");
         Assert.notNull(pages, "there is no book without pages");
-        Assert.state(pages > 100, "min number of pages is 100");
+        Assert.state(pages >= 100, "min number of pages is 100");
         Assert.hasLength(isbn, "there is no book without isbn");
         Assert.notNull(releaseAt, "there is no book without release date");
         Assert.notNull(category, "there is no book without category");

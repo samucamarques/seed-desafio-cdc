@@ -110,9 +110,11 @@ public class Acquisition implements CDCEntity {
         this.zipCode = zipCode;
         this.totalPrice = totalPrice;
         this.items = items;
+
+        Assert.state(isValidTotalPrice(), "total prices is wrong");
     }
 
-    public boolean checkTotalPrice() {
+    public boolean isValidTotalPrice() {
         final BigDecimal internalTotalPrice =
                 items.stream()
                         .map(Item::totalPrice)

@@ -1,5 +1,7 @@
 package br.com.casadocodigo.acquisition;
 
+import br.com.casadocodigo.book.Book;
+import br.com.casadocodigo.commons.validation.ExistsById;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,5 +18,6 @@ public class ItemRequest {
     private Integer ammount;
 
     @NotNull
+    @ExistsById(entityClass = Book.class)
     private Long bookId;
 }

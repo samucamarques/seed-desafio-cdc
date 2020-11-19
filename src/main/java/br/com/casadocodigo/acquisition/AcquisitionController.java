@@ -3,6 +3,9 @@ package br.com.casadocodigo.acquisition;
 import br.com.casadocodigo.book.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.beanvalidation.CustomValidatorBean;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +17,7 @@ import java.net.URI;
 
 //Intrinsic cognitive load: 5
 @RestController
-@RequestMapping("/flux/payment")
+@RequestMapping("/acquisition")
 @RequiredArgsConstructor
 public class AcquisitionController {
 
@@ -23,6 +26,11 @@ public class AcquisitionController {
     //1
     private final BookRepository bookRepository;
 
+    @InitBinder
+    public void bind(WebDataBinder binder) {
+        binder.addValidators(new TotalPriceValidator(bookRepository));
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public URI create(
@@ -30,6 +38,6 @@ public class AcquisitionController {
 
         //1
         Acquisition acquisition = acquisitionRepository.save(request.toDomain(bookRepository::findAllById)); //1
-        return URI.create(String.format("/detail/%sd", acquisition.getId()));
+        return URI.create(String.format("/detail/%d", acquisition.getId()));
     }
 }
