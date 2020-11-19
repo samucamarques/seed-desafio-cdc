@@ -2,7 +2,6 @@ package br.com.casadocodigo.acquisition;
 
 import br.com.casadocodigo.commons.contracts.CDCEntity;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.Assert;
 
@@ -24,7 +23,6 @@ public class Acquisition implements CDCEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
     private Long id;
 
     @NotEmpty
@@ -112,6 +110,11 @@ public class Acquisition implements CDCEntity {
         this.items = items;
 
         Assert.state(isValidTotalPrice(), "total prices is wrong");
+    }
+
+    public Long getId() {
+        Assert.notNull(id, "Acquisition is not saved yet.");
+        return id;
     }
 
     public boolean isValidTotalPrice() {
