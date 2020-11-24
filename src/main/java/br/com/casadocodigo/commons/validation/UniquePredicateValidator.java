@@ -4,6 +4,7 @@ import br.com.casadocodigo.author.AuthorRepository;
 import br.com.casadocodigo.book.BookRepository;
 import br.com.casadocodigo.category.CategoryRepository;
 import br.com.casadocodigo.country.CountryRepository;
+import br.com.casadocodigo.coupon.CouponRepository;
 import br.com.casadocodigo.state.StateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -21,10 +22,16 @@ public class UniquePredicateValidator implements ConstraintValidator<UniquePredi
     private final CategoryRepository categoryRepository;
     private final CountryRepository countryRepository;
     private final StateRepository stateRepository;
+    private final CouponRepository couponRepository;
 
     private Map<String, Map<String, Predicate<String>>> predicates;
     private String category;
     private String predicate;
+
+    private Map<String, Predicate<String>> getCouponPredicatesMap() {
+        return Map.of(
+                "existsByCode", couponRepository::existsByCode);
+    }
 
     private Map<String, Predicate<String>> getBookPredicatesMap() {
         return Map.of(
@@ -55,7 +62,8 @@ public class UniquePredicateValidator implements ConstraintValidator<UniquePredi
                         "author", getAuthorPredicatesMap(),
                         "category", getCategoryPredicatesMap(),
                         "country", getCountryPredicatesMap(),
-                        "state", getStatePredicatesMap());
+                        "state", getStatePredicatesMap(),
+                        "coupon", getCouponPredicatesMap());
 
         category = constraintAnnotation.category();
         predicate = String.format("existsBy%s", StringUtils.capitalize(constraintAnnotation.property()));
