@@ -22,6 +22,9 @@ public class TotalPriceValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        if (errors.hasErrors()) {
+            return;
+        }
         final AcquisitionRequest acquisitionRequest = (AcquisitionRequest) target;
 
         final List<Long> bookIds =

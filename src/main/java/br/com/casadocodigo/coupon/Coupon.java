@@ -1,5 +1,7 @@
 package br.com.casadocodigo.coupon;
 
+import br.com.casadocodigo.commons.contracts.CDCEntity;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,10 +11,10 @@ import java.time.Instant;
 import java.util.Map;
 
 @Entity
-public class Coupon {
+public class Coupon implements CDCEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String code;
@@ -33,5 +35,13 @@ public class Coupon {
 
     public Map<String, Object> toMap() {
         return Map.of("id", id, "code", code, "discount", discount, "expires", expirationDate);
+    }
+
+    public boolean isValid() {
+        return this.expirationDate.isAfter(Instant.now());
+    }
+
+    public boolean hasId() {
+        return id != null;
     }
 }

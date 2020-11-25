@@ -8,5 +8,5 @@ import java.util.Optional;
 @Repository
 public interface AcquisitionRepository extends JpaRepository<Acquisition, Long> {
 
-
+    Optional<AcquisitionDetailProjection> findDetailById(Long id);
 }

@@ -1,20 +1,26 @@
 package br.com.casadocodigo.acquisition;
 
 import br.com.casadocodigo.commons.contracts.CDCEntity;
+import br.com.casadocodigo.country.Country;
+import br.com.casadocodigo.coupon.Coupon;
+import br.com.casadocodigo.state.State;
 import lombok.Builder;
 import lombok.Setter;
 import org.springframework.util.Assert;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.List;
 
 @Entity
@@ -22,7 +28,7 @@ import java.util.List;
 public class Acquisition implements CDCEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotEmpty
@@ -48,10 +54,12 @@ public class Acquisition implements CDCEntity {
     private String city;
 
     @NotNull
-    private Long countryId;
+    @ManyToOne
+    private Country country;
 
     @Setter
-    private Long stateId;
+    @ManyToOne
+    private State state;
 
     @NotEmpty
     private String phoneNumber;
@@ -63,7 +71,11 @@ public class Acquisition implements CDCEntity {
     private BigDecimal totalPrice;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @NotEmpty
     private List<Item> items;
+
+    @ManyToOne
+    private Coupon coupon;
 
     @Deprecated
     protected Acquisition() {
@@ -77,7 +89,7 @@ public class Acquisition implements CDCEntity {
             @NotEmpty String address,
             @NotEmpty String addressComplement,
             @NotEmpty String city,
-            @NotNull Long countryId,
+            @NotNull Country country,
             @NotEmpty String phoneNumber,
             @NotEmpty String zipCode,
             @NotNull BigDecimal totalPrice,
@@ -90,7 +102,7 @@ public class Acquisition implements CDCEntity {
         Assert.hasLength(address, "there is no acquisition without address");
         Assert.hasLength(addressComplement, "there is no acquisition without addressComplement");
         Assert.hasLength(city, "there is no acquisition without city");
-        Assert.notNull(countryId, "there is no acquisition without countryId");
+        Assert.notNull(country, "there is no acquisition without country");
         Assert.hasLength(phoneNumber, "there is no acquisition without phoneNumber");
         Assert.hasLength(zipCode, "there is no acquisition without zipCode");
         Assert.notNull(totalPrice, "there is no acquisition without totalPrice");
@@ -103,7 +115,7 @@ public class Acquisition implements CDCEntity {
         this.address = address;
         this.addressComplement = addressComplement;
         this.city = city;
-        this.countryId = countryId;
+        this.country = country;
         this.phoneNumber = phoneNumber;
         this.zipCode = zipCode;
         this.totalPrice = totalPrice;
@@ -112,9 +124,13 @@ public class Acquisition implements CDCEntity {
         Assert.state(isValidTotalPrice(), "total prices is wrong");
     }
 
-    public Long getId() {
-        Assert.notNull(id, "Acquisition is not saved yet.");
-        return id;
+    public void setCoupon(Coupon coupon) {
+        Assert.state(coupon.hasId(), "Coupon not found");
+        Assert.state(coupon.isValid(), "Coupon has expired");
+        Assert.isNull(this.coupon, "Coupon can't be changed");
+        Assert.isNull(this.id, "Coupon can't be applied to a saved acquisition");
+
+        this.coupon = coupon;
     }
 
     public boolean isValidTotalPrice() {
@@ -124,6 +140,10 @@ public class Acquisition implements CDCEntity {
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return totalPrice.compareTo(internalTotalPrice) == 0;
+    }
+
+    public URI detailURI(UriComponentsBuilder uriBuilder) {
+        return uriBuilder.path("/detail/{id}").build(this.id);
     }
 
     public static class AcquisitionBuilder {
@@ -137,15 +157,15 @@ public class Acquisition implements CDCEntity {
                             address,
                             addressComplement,
                             city,
-                            countryId,
+                            country,
                             phoneNumber,
                             zipCode,
                             totalPrice,
                             items);
 
-            fluxPayment.setStateId(stateId);
+            fluxPayment.setState(state);
+            fluxPayment.setCoupon(coupon);
             return fluxPayment;
         }
     }
-
 }

@@ -5,6 +5,7 @@ import br.com.casadocodigo.commons.validation.CountryOwnership;
 import br.com.casadocodigo.commons.validation.DocId;
 import br.com.casadocodigo.commons.validation.ExistsById;
 import br.com.casadocodigo.country.Country;
+import br.com.casadocodigo.coupon.Coupon;
 import br.com.casadocodigo.state.State;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,9 +20,10 @@ import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.LongFunction;
 import java.util.stream.Collectors;
 
-//Intrinsic cognitive load: 7
+//Intrinsic cognitive load: 8
 @AllArgsConstructor
 @Getter // for swagger to show the properties on request body example
 @CountryOwnership(countryField = "countryId", stateField = "stateId")
@@ -71,10 +73,24 @@ public class AcquisitionRequest {
     @NotEmpty
     private final List<ItemRequest> items;
 
+    private final String couponCode;
+
     //1
-    public Acquisition toDomain(Function<List<Long>, List<Book>> findBookByIdIn) {
+    public Acquisition toDomain(
+            Function<List<Long>, List<Book>> findBookByIdIn,
+            Function<String, Coupon> findCouponByCode,
+            LongFunction<Country> findCountryById,
+            LongFunction<State> findStateById) {
         //1
         final List<Book> booksOnShoppingCart = findBookByIdIn.apply(getBookIds());
+        //1
+        final Coupon coupon = findCouponByCode.apply(couponCode);
+
+        final Country country = findCountryById.apply(getCountryId());
+        State state = null;
+        if (getStateId() != null) {
+            state = findStateById.apply(getStateId());
+        }
 
         return Acquisition.builder()
                 .mailAccount(mailAccount)
@@ -84,8 +100,8 @@ public class AcquisitionRequest {
                 .address(address)
                 .addressComplement(addressComplement)
                 .city(city)
-                .countryId(countryId)
-                .stateId(stateId)
+                .country(country)
+                .state(state)
                 .phoneNumber(phoneNumber)
                 .zipCode(zipCode)
                 .totalPrice(totalPrice)
@@ -94,6 +110,7 @@ public class AcquisitionRequest {
                         .map(item -> new Item(item.getAmmount(), findMyBook(booksOnShoppingCart, item.getBookId())))
                         //1
                         .collect(Collectors.toList()))
+                .coupon(coupon)
                 .build();
     }
 
@@ -104,6 +121,8 @@ public class AcquisitionRequest {
 
     private List<Long> getBookIds() {
         //1
-        return items.stream().map(ItemRequest::getBookId).collect(Collectors.toList()); //1
+        return items.stream()
+                .map(ItemRequest::getBookId)
+                .collect(Collectors.toList()); //1
     }
 }
